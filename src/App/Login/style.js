@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
-const LogoPage = styled.div`
+const LoginPage = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   min-height: 100vh;
 `;
 
-export { LogoPage };
+export { LoginPage };

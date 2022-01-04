@@ -1,11 +1,15 @@
-import { LogoPage } from "./style";
+import Login from "./Login";
+import SignUp from "./SignUp";
 
-import logo from "../assets/logo.svg";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function App() {
   return (
-    <LogoPage>
-      <img src={logo} alt="Logo" />
-    </LogoPage>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/cadastro" element={<SignUp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
