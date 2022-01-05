@@ -1,7 +1,10 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Login from "./Login";
 import SignUp from "./SignUp";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "../styles/reset.css";
+import "../styles/fonts.css";
 
 export default function App() {
   return (
