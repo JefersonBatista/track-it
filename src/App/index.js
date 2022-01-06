@@ -5,6 +5,7 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import Today from "./Today";
 import Habits from "./Habits";
+import Historic from "./Historic";
 
 import "../styles/reset.css";
 import "../styles/fonts.css";
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/cadastro" element={<SignUp />} />
         <Route path="/hoje" element={<Today userImage={image} />} />
         <Route path="/habitos" element={<Habits userImage={image} />} />
+        <Route path="/historic" element={<Historic userImage={image} />} />
       </Routes>
     </BrowserRouter>
   );

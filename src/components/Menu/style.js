@@ -3,6 +3,7 @@ import styled from "styled-components";
 const Footer = styled.footer`
   position: fixed;
   bottom: 0;
+  left: 0;
 
   display: flex;
   justify-content: space-between;
