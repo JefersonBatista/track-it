@@ -4,12 +4,13 @@ import { useState } from "react";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Today from "./Today";
+import Habits from "./Habits";
 
 import "../styles/reset.css";
 import "../styles/fonts.css";
 
 export default function App() {
-  const [email, setEmail] = useState("");
+  const [image, setImage] = useState("");
   const [token, setToken] = useState("");
 
   return (
@@ -17,10 +18,11 @@ export default function App() {
       <Routes>
         <Route
           path="/"
-          element={<Login setEmail={setEmail} setToken={setToken} />}
+          element={<Login setImage={setImage} setToken={setToken} />}
         />
         <Route path="/cadastro" element={<SignUp />} />
-        <Route path="/hoje" element={<Today />} />
+        <Route path="/hoje" element={<Today userImage={image} />} />
+        <Route path="/habitos" element={<Habits userImage={image} />} />
       </Routes>
     </BrowserRouter>
   );

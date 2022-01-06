@@ -16,6 +16,8 @@ const LoginForm = styled.form`
   gap: 6px;
   margin-top: 33px;
   margin-bottom: 25px;
+
+  width: 100%;
 `;
 
 export { LoginPage, LoginForm };

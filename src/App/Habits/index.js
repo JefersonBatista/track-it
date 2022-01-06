@@ -1,16 +1,16 @@
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
 
-import { TodayPage } from "./style.js";
+import { HabitsPage } from "./style.js";
 
-export default function Today({ userImage }) {
+export default function Habits({ userImage }) {
   return (
-    <TodayPage>
+    <HabitsPage>
       <TopBar userImage={userImage} />
 
-      <h1>Hoje</h1>
+      <h1>Hábitos</h1>
 
       <Menu />
-    </TodayPage>
+    </HabitsPage>
   );
 }

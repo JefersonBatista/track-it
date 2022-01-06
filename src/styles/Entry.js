@@ -10,6 +10,7 @@ const Entry = styled.input`
 
   font-family: "Lexend Deca", sans-serif;
   font-size: 20px;
+  color: #666666;
 
   ::placeholder {
     color: #dbdbdb;

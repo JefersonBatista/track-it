@@ -72,7 +72,14 @@ export default function SignUp() {
           onChange={handleChange}
           value={formData.image}
         />
-        <Button type="submit" size="large">
+        <Button
+          type="submit"
+          width="100%"
+          height="45px"
+          radius="5px"
+          highlighted
+          fontSize="21px"
+        >
           Cadastrar
         </Button>
       </SignUpForm>

@@ -10,7 +10,7 @@ import { LoginPage, LoginForm } from "./style";
 
 import logo from "../../assets/logo.svg";
 
-export default function Login({ setEmail, setToken }) {
+export default function Login({ setImage, setToken }) {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -32,7 +32,7 @@ export default function Login({ setEmail, setToken }) {
       )
       .then((response) => {
         console.log(response.data);
-        setEmail(response.data.email);
+        setImage(response.data.image);
         setToken(response.data.token);
         navigate("/hoje");
       })
@@ -58,7 +58,14 @@ export default function Login({ setEmail, setToken }) {
           onChange={handleChange}
           value={formData.password}
         />
-        <Button type="submit" size="large">
+        <Button
+          type="submit"
+          width="100%"
+          height="45px"
+          radius="5px"
+          highlighted
+          fontSize="21px"
+        >
           Entrar
         </Button>
       </LoginForm>
