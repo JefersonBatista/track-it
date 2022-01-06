@@ -13,6 +13,8 @@ import logo from "../../assets/logo.svg";
 export default function SignUp() {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,6 +29,8 @@ export default function SignUp() {
   function handleSubmit(event) {
     event.preventDefault();
 
+    setLoading(true);
+
     axios
       .post(
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
@@ -36,7 +40,10 @@ export default function SignUp() {
         console.log(response.data);
         navigate("/");
       })
-      .catch((error) => alert(error.response));
+      .catch((error) => {
+        alert(error.response.data.message);
+        setLoading(false);
+      });
   }
 
   return (
@@ -50,6 +57,7 @@ export default function SignUp() {
           name="email"
           onChange={handleChange}
           value={formData.email}
+          disabled={loading}
         />
         <Entry
           type="password"
@@ -57,6 +65,7 @@ export default function SignUp() {
           name="password"
           onChange={handleChange}
           value={formData.password}
+          disabled={loading}
         />
         <Entry
           type="text"
@@ -64,6 +73,7 @@ export default function SignUp() {
           name="name"
           onChange={handleChange}
           value={formData.name}
+          disabled={loading}
         />
         <Entry
           type="url"
@@ -71,6 +81,7 @@ export default function SignUp() {
           name="image"
           onChange={handleChange}
           value={formData.image}
+          disabled={loading}
         />
         <Button
           type="submit"
@@ -79,6 +90,7 @@ export default function SignUp() {
           radius="5px"
           highlighted
           fontSize="21px"
+          disabled={loading}
         >
           Cadastrar
         </Button>

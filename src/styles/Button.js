@@ -6,6 +6,7 @@ const Button = styled.button`
   border-radius: ${({ radius }) => (radius ? radius : 0)};
   border: none;
   background-color: ${({ highlighted }) => (highlighted ? "#52b6ff" : "white")};
+  opacity: ${({ disabled }) => (disabled ? 0.7 : 1)};
 
   font-family: "Lexend Deca", sans-serif;
   font-size: ${({ fontSize }) => fontSize};

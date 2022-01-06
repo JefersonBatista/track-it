@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loader from "react-loader-spinner";
 
 import { Button } from "../../styles/Button";
 import { Entry } from "../../styles/Entry";
@@ -18,12 +19,16 @@ export default function Login({ setImage, setToken }) {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   function handleChange(event) {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   }
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    setLoading(true);
 
     axios
       .post(
@@ -36,7 +41,10 @@ export default function Login({ setImage, setToken }) {
         setToken(response.data.token);
         navigate("/hoje");
       })
-      .catch((error) => alert(error.response.data.message));
+      .catch((error) => {
+        alert(error.response.data.message);
+        setLoading(false);
+      });
   }
 
   return (
@@ -50,6 +58,7 @@ export default function Login({ setImage, setToken }) {
           name="email"
           onChange={handleChange}
           value={formData.email}
+          disabled={loading}
         />
         <Entry
           type="password"
@@ -57,6 +66,7 @@ export default function Login({ setImage, setToken }) {
           name="password"
           onChange={handleChange}
           value={formData.password}
+          disabled={loading}
         />
         <Button
           type="submit"
@@ -65,8 +75,13 @@ export default function Login({ setImage, setToken }) {
           radius="5px"
           highlighted
           fontSize="21px"
+          disabled={loading}
         >
-          Entrar
+          {loading ? (
+            <Loader type="ThreeDots" color="white" height={45} width={45} />
+          ) : (
+            "Entrar"
+          )}
         </Button>
       </LoginForm>
 
