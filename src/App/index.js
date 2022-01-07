@@ -22,9 +22,18 @@ export default function App() {
           element={<Login setImage={setImage} setToken={setToken} />}
         />
         <Route path="/cadastro" element={<SignUp />} />
-        <Route path="/hoje" element={<Today userImage={image} />} />
-        <Route path="/habitos" element={<Habits userImage={image} />} />
-        <Route path="/historic" element={<Historic userImage={image} />} />
+        <Route
+          path="/hoje"
+          element={<Today userImage={image} token={token} />}
+        />
+        <Route
+          path="/habitos"
+          element={<Habits userImage={image} token={token} />}
+        />
+        <Route
+          path="/historico"
+          element={<Historic userImage={image} token={token} />}
+        />
       </Routes>
     </BrowserRouter>
   );

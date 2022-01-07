@@ -23,7 +23,7 @@ export default function Menu() {
       >
         Hoje
       </Button>
-      <Button fontSize="18px" onClick={() => navigate("/historic")}>
+      <Button fontSize="18px" onClick={() => navigate("/historico")}>
         Histórico
       </Button>
     </Footer>

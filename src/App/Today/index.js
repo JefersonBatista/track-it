@@ -1,13 +1,21 @@
 import dayjs from "dayjs";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
 
 import { TodayPage, TodayTop } from "./style.js";
 
-export default function Today({ userImage }) {
+export default function Today({ userImage, token }) {
+  const today = dayjs();
+
+  function twoDigitsFormat(number) {
+    return ("0" + number).slice(-2);
+  }
+
   function dayOfWeek() {
-    switch (dayjs().day()) {
+    switch (today.day()) {
       case 0:
         return "Domingo";
       case 1:
@@ -26,12 +34,28 @@ export default function Today({ userImage }) {
   }
 
   function dayOfMonth() {
-    return ("0" + dayjs().date()).slice(-2);
+    return twoDigitsFormat(today.date());
   }
 
   function month() {
-    return ("0" + dayjs().month() + 1).slice(-2);
+    return twoDigitsFormat(today.month() + 1);
   }
+
+  const [habits, setHabits] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }, [token]);
 
   return (
     <TodayPage>
