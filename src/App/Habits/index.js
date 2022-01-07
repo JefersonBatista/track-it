@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "react-loader-spinner";
+import { TrashOutline } from "react-ionicons";
+import { AddSharp } from "react-ionicons";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
@@ -16,6 +18,7 @@ import {
   NewHabitInfo,
   Weekdays,
   Weekday,
+  Habit,
 } from "./style.js";
 
 export default function Habits({ userImage, token }) {
@@ -24,6 +27,8 @@ export default function Habits({ userImage, token }) {
   const [newHabitName, setNewHabitName] = useState("");
   const [newHabitDays, setNewHabitDays] = useState([]);
   const [habitCreationLoading, setHabitCreationLoading] = useState(false);
+
+  const weekdays = ["D", "S", "T", "Q", "Q", "S", "S"];
 
   function handleNameChange(event) {
     setNewHabitName(event.target.value);
@@ -46,6 +51,12 @@ export default function Habits({ userImage, token }) {
 
     setHabitCreationLoading(true);
 
+    if (newHabitDays.length === 0) {
+      setHabitCreationLoading(false);
+      alert("Nenhum dia da semana selecionado!");
+      return;
+    }
+
     axios
       .post(
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
@@ -58,10 +69,12 @@ export default function Habits({ userImage, token }) {
         }
       )
       .then((response) => {
-        console.log(response.data);
+        setHabitCreation(false);
         setNewHabitName("");
         setNewHabitDays([]);
         setHabitCreationLoading(false);
+
+        getHabits();
       })
       .catch((error) => {
         alert(error.response.data.message);
@@ -69,19 +82,49 @@ export default function Habits({ userImage, token }) {
       });
   }
 
-  useEffect(() => {
+  function getHabits() {
     axios
       .get(
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((response) => {
-        console.log(response.data);
+        setHabits(response.data);
       })
       .catch((error) => {
         console.log(error.response);
       });
+  }
+
+  function handleDelete(habitId, habitName) {
+    if (window.confirm(`Deseja mesmo deleter o hábito '${habitName}'?`)) {
+      axios
+        .delete(
+          `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then(() => {
+          getHabits();
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
+  }
+
+  useEffect(() => {
+    getHabits();
   }, [token]);
+
+  if (habits === null) {
+    return (
+      <HabitsPage>
+        <TopBar userImage={userImage} />
+
+        <Menu />
+      </HabitsPage>
+    );
+  }
 
   return (
     <HabitsPage>
@@ -99,7 +142,12 @@ export default function Habits({ userImage, token }) {
             setHabitCreation(true);
           }}
         >
-          +
+          <AddSharp
+            title="Criar hábito"
+            width="20px"
+            height="20px"
+            color="white"
+          ></AddSharp>
         </Button>
       </HabitsTop>
 
@@ -108,81 +156,25 @@ export default function Habits({ userImage, token }) {
           <NewHabitInfo>
             <Entry
               placeholder="nome do hábito"
+              required
               onChange={handleNameChange}
               value={newHabitName}
               disabled={habitCreationLoading}
             />
             <Weekdays>
-              <Weekday
-                type="button"
-                selected={dayIsSelected(0)}
-                onClick={() => {
-                  handleDayChange(0);
-                }}
-                disabled={habitCreationLoading}
-              >
-                D
-              </Weekday>
-              <Weekday
-                type="button"
-                selected={dayIsSelected(1)}
-                onClick={() => {
-                  handleDayChange(1);
-                }}
-                disabled={habitCreationLoading}
-              >
-                S
-              </Weekday>
-              <Weekday
-                type="button"
-                selected={dayIsSelected(2)}
-                onClick={() => {
-                  handleDayChange(2);
-                }}
-                disabled={habitCreationLoading}
-              >
-                T
-              </Weekday>
-              <Weekday
-                type="button"
-                selected={dayIsSelected(3)}
-                onClick={() => {
-                  handleDayChange(3);
-                }}
-                disabled={habitCreationLoading}
-              >
-                Q
-              </Weekday>
-              <Weekday
-                type="button"
-                selected={dayIsSelected(4)}
-                onClick={() => {
-                  handleDayChange(4);
-                }}
-                disabled={habitCreationLoading}
-              >
-                Q
-              </Weekday>
-              <Weekday
-                type="button"
-                selected={dayIsSelected(5)}
-                onClick={() => {
-                  handleDayChange(5);
-                }}
-                disabled={habitCreationLoading}
-              >
-                S
-              </Weekday>
-              <Weekday
-                type="button"
-                selected={dayIsSelected(6)}
-                onClick={() => {
-                  handleDayChange(6);
-                }}
-                disabled={habitCreationLoading}
-              >
-                S
-              </Weekday>
+              {weekdays.map((weekday, index) => (
+                <Weekday
+                  key={index}
+                  type="button"
+                  selected={dayIsSelected(index)}
+                  onClick={() => {
+                    handleDayChange(index);
+                  }}
+                  disabled={habitCreationLoading}
+                >
+                  {weekday}
+                </Weekday>
+              ))}
             </Weekdays>
           </NewHabitInfo>
 
@@ -215,10 +207,38 @@ export default function Habits({ userImage, token }) {
           </div>
         </HabitCreation>
       )}
-      <NoHabitsMessage>
-        Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
-        começar a trackear!
-      </NoHabitsMessage>
+
+      {habits.length === 0 ? (
+        <NoHabitsMessage>
+          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
+          começar a trackear!
+        </NoHabitsMessage>
+      ) : (
+        habits.map((habit) => (
+          <Habit key={habit.id}>
+            <h2>{habit.name}</h2>
+            <Weekdays>
+              {weekdays.map((weekday, index) => (
+                <Weekday
+                  key={index}
+                  disabled
+                  selected={habit.days.includes(index)}
+                >
+                  {weekday}
+                </Weekday>
+              ))}
+            </Weekdays>
+            <TrashOutline
+              className="delete"
+              title="Deletar hábito"
+              width="13px"
+              height="15px"
+              color="#666666"
+              onClick={() => handleDelete(habit.id, habit.name)}
+            ></TrashOutline>
+          </Habit>
+        ))
+      )}
 
       <Menu />
     </HabitsPage>

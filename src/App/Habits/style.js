@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 const HabitsPage = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 70px 17px;
 
   min-height: 100vh;
@@ -75,6 +78,30 @@ const Weekday = styled.button`
   color: ${({ selected }) => (selected ? "white" : "#dbdbdb")};
 `;
 
+const Habit = styled.article`
+  position: relative;
+
+  padding: 15px;
+
+  width: 100%;
+  height: 91px;
+  border-radius: 5px;
+  background-color: white;
+
+  h2 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    color: #666666;
+  }
+
+  .delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+`;
+
 export {
   HabitsPage,
   HabitsTop,
@@ -83,4 +110,5 @@ export {
   NewHabitInfo,
   Weekdays,
   Weekday,
+  Habit,
 };
