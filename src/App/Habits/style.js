@@ -4,7 +4,7 @@ const HabitsPage = styled.section`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 70px 17px;
+  padding: 70px 17px 110px;
 
   min-height: 100vh;
   background-color: #f2f2f2;
@@ -84,11 +84,14 @@ const Habit = styled.article`
   padding: 15px;
 
   width: 100%;
-  height: 91px;
   border-radius: 5px;
   background-color: white;
 
   h2 {
+    width: 90%;
+
+    word-wrap: break-word;
+
     font-style: normal;
     font-weight: normal;
     font-size: 20px;

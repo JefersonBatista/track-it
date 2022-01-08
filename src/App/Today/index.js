@@ -1,11 +1,14 @@
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from "react-loader-spinner";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
 
-import { TodayPage, TodayTop } from "./style.js";
+import { TodayPage, TodayTop, Habits, Habit, HabitCheck } from "./style.js";
+
+import check from "../../assets/check.svg";
 
 export default function Today({ userImage, token }) {
   const today = dayjs();
@@ -42,20 +45,55 @@ export default function Today({ userImage, token }) {
   }
 
   const [habits, setHabits] = useState(null);
+  const [checkLoading, setCheckLoading] = useState(false);
 
-  useEffect(() => {
+  function getHabits() {
     axios
       .get(
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((response) => {
-        console.log(response.data);
+        setHabits(response.data);
       })
       .catch((error) => {
         console.log(error.response);
       });
-  }, [token]);
+  }
+
+  function handleCheck(habitId, done) {
+    const BASE_URL =
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/";
+
+    setCheckLoading(habitId);
+
+    axios
+      .post(
+        `${BASE_URL}/${habitId}/${done ? "uncheck" : "check"}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => {
+        setCheckLoading(false);
+        getHabits();
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setCheckLoading(false);
+      });
+  }
+
+  useEffect(getHabits, [token]);
+
+  if (habits === null) {
+    return (
+      <TodayPage>
+        <TopBar userImage={userImage} />
+
+        <Menu />
+      </TodayPage>
+    );
+  }
 
   return (
     <TodayPage>
@@ -64,6 +102,36 @@ export default function Today({ userImage, token }) {
         <h1>{`${dayOfWeek()}, ${dayOfMonth()}/${month()}`}</h1>
         <p>Nenhum hábito concluído ainda</p>
       </TodayTop>
+
+      <Habits>
+        {habits.map((habit) => (
+          <Habit key={habit.id}>
+            <div>
+              <h2>{habit.name}</h2>
+              <p>
+                Sequência atual: {habit.currentSequence} dia
+                {habit.currentSequence === 1 ? "" : "s"}
+              </p>
+              <p>
+                Seu recorde: {habit.highestSequence} dia
+                {habit.highestSequence === 1 ? "" : "s"}
+              </p>
+            </div>
+
+            <HabitCheck
+              done={habit.done}
+              disable={checkLoading}
+              onClick={() => handleCheck(habit.id, habit.done)}
+            >
+              {checkLoading === habit.id ? (
+                <Loader type="ThreeDots" color="white" height={69} width={69} />
+              ) : (
+                <img src={check} alt="Check" />
+              )}
+            </HabitCheck>
+          </Habit>
+        ))}
+      </Habits>
       <Menu />
     </TodayPage>
   );

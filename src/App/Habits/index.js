@@ -103,18 +103,14 @@ export default function Habits({ userImage, token }) {
           `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         )
-        .then(() => {
-          getHabits();
-        })
+        .then(getHabits)
         .catch((error) => {
           console.log(error.response);
         });
     }
   }
 
-  useEffect(() => {
-    getHabits();
-  }, [token]);
+  useEffect(getHabits, [token]);
 
   if (habits === null) {
     return (
@@ -231,8 +227,8 @@ export default function Habits({ userImage, token }) {
             <TrashOutline
               className="delete"
               title="Deletar hábito"
-              width="13px"
-              height="15px"
+              width="20px"
+              height="20px"
               color="#666666"
               onClick={() => handleDelete(habit.id, habit.name)}
             ></TrashOutline>
