@@ -16,8 +16,15 @@ const Footer = styled.footer`
   background-color: white;
 
   .today {
-    align-self: flex-end;
-    margin-bottom: 10px;
+    position: absolute;
+    left: calc(50% - 45px);
+    bottom: 10px;
+
+    div {
+      position: absolute;
+      width: 79px;
+      height: 79px;
+    }
   }
 `;
 

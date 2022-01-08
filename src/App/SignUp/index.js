@@ -37,7 +37,6 @@ export default function SignUp() {
         formData
       )
       .then((response) => {
-        console.log(response.data);
         navigate("/");
       })
       .catch((error) => {

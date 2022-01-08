@@ -23,6 +23,14 @@ const TodayTop = styled.div`
     font-size: 18px;
     color: #bababa;
   }
+
+  .none {
+    color: #bababa;
+  }
+
+  .some {
+    color: #8fc549;
+  }
 `;
 
 const Habits = styled.div`
@@ -63,6 +71,10 @@ const Habit = styled.article`
     font-weight: normal;
     font-size: 13px;
     color: #666666;
+
+    .done {
+      color: #8fc549;
+    }
   }
 `;
 

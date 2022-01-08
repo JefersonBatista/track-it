@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
@@ -10,7 +11,12 @@ import { TodayPage, TodayTop, Habits, Habit, HabitCheck } from "./style.js";
 
 import check from "../../assets/check.svg";
 
-export default function Today({ userImage, token }) {
+export default function Today({
+  userImage,
+  token,
+  todayProgress,
+  setTodayProgress,
+}) {
   const today = dayjs();
 
   function twoDigitsFormat(number) {
@@ -33,6 +39,8 @@ export default function Today({ userImage, token }) {
         return "Sexta";
       case 6:
         return "Sábado";
+      default:
+        return "";
     }
   }
 
@@ -55,6 +63,11 @@ export default function Today({ userImage, token }) {
       )
       .then((response) => {
         setHabits(response.data);
+        const percentage =
+          (response.data.filter((habit) => habit.done).length /
+            response.data.length) *
+          100;
+        setTodayProgress(percentage);
       })
       .catch((error) => {
         console.log(error.response);
@@ -90,7 +103,7 @@ export default function Today({ userImage, token }) {
       <TodayPage>
         <TopBar userImage={userImage} />
 
-        <Menu />
+        <Menu todayProgress={todayProgress} />
       </TodayPage>
     );
   }
@@ -100,7 +113,13 @@ export default function Today({ userImage, token }) {
       <TopBar userImage={userImage} />
       <TodayTop>
         <h1>{`${dayOfWeek()}, ${dayOfMonth()}/${month()}`}</h1>
-        <p>Nenhum hábito concluído ainda</p>
+        {todayProgress === 0.0 ? (
+          <p className="none">Nenhum hábito concluído ainda</p>
+        ) : (
+          <p className="some">
+            {todayProgress.toFixed(0)}% dos hábitos concluídos
+          </p>
+        )}
       </TodayTop>
 
       <Habits>
@@ -109,12 +128,25 @@ export default function Today({ userImage, token }) {
             <div>
               <h2>{habit.name}</h2>
               <p>
-                Sequência atual: {habit.currentSequence} dia
-                {habit.currentSequence === 1 ? "" : "s"}
+                Sequência atual:{" "}
+                <span className={habit.done ? "done" : ""}>
+                  {habit.currentSequence} dia
+                  {habit.currentSequence === 1 ? "" : "s"}
+                </span>
               </p>
               <p>
-                Seu recorde: {habit.highestSequence} dia
-                {habit.highestSequence === 1 ? "" : "s"}
+                Seu recorde:{" "}
+                <span
+                  className={
+                    habit.done &&
+                    habit.currentSequence === habit.highestSequence
+                      ? "done"
+                      : ""
+                  }
+                >
+                  {habit.highestSequence} dia
+                  {habit.highestSequence === 1 ? "" : "s"}
+                </span>
               </p>
             </div>
 
@@ -132,7 +164,7 @@ export default function Today({ userImage, token }) {
           </Habit>
         ))}
       </Habits>
-      <Menu />
+      <Menu todayProgress={todayProgress} />
     </TodayPage>
   );
 }

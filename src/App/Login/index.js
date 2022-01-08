@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import { Button } from "../../styles/Button";
 import { Entry } from "../../styles/Entry";
@@ -36,7 +37,6 @@ export default function Login({ setImage, setToken }) {
         formData
       )
       .then((response) => {
-        console.log(response.data);
         setImage(response.data.image);
         setToken(response.data.token);
         navigate("/hoje");

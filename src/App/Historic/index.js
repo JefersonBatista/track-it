@@ -3,7 +3,7 @@ import Menu from "../../components/Menu";
 
 import { HistoricPage, NoHistoricMessage } from "./style";
 
-export default function Historic({ userImage }) {
+export default function Historic({ userImage, todayProgress }) {
   return (
     <HistoricPage>
       <TopBar userImage={userImage} />
@@ -14,7 +14,7 @@ export default function Historic({ userImage }) {
         Em breve você poderá ver o histórico dos seus hábitos aqui!
       </NoHistoricMessage>
 
-      <Menu />
+      <Menu todayProgress={todayProgress} />
     </HistoricPage>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { TrashOutline } from "react-ionicons";
 import { AddSharp } from "react-ionicons";
 
@@ -21,7 +22,7 @@ import {
   Habit,
 } from "./style.js";
 
-export default function Habits({ userImage, token }) {
+export default function Habits({ userImage, token, todayProgress }) {
   const [habits, setHabits] = useState(null);
   const [habitCreation, setHabitCreation] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
@@ -117,7 +118,7 @@ export default function Habits({ userImage, token }) {
       <HabitsPage>
         <TopBar userImage={userImage} />
 
-        <Menu />
+        <Menu todayProgress={todayProgress} />
       </HabitsPage>
     );
   }
@@ -236,7 +237,7 @@ export default function Habits({ userImage, token }) {
         ))
       )}
 
-      <Menu />
+      <Menu todayProgress={todayProgress} />
     </HabitsPage>
   );
 }

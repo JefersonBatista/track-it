@@ -13,6 +13,7 @@ import "../styles/fonts.css";
 export default function App() {
   const [image, setImage] = useState("");
   const [token, setToken] = useState("");
+  const [todayProgress, setTodayProgress] = useState(0.0);
 
   return (
     <BrowserRouter>
@@ -24,15 +25,28 @@ export default function App() {
         <Route path="/cadastro" element={<SignUp />} />
         <Route
           path="/hoje"
-          element={<Today userImage={image} token={token} />}
+          element={
+            <Today
+              userImage={image}
+              token={token}
+              todayProgress={todayProgress}
+              setTodayProgress={setTodayProgress}
+            />
+          }
         />
         <Route
           path="/habitos"
-          element={<Habits userImage={image} token={token} />}
+          element={
+            <Habits
+              userImage={image}
+              token={token}
+              todayProgress={todayProgress}
+            />
+          }
         />
         <Route
           path="/historico"
-          element={<Historic userImage={image} token={token} />}
+          element={<Historic userImage={image} todayProgress={todayProgress} />}
         />
       </Routes>
     </BrowserRouter>
