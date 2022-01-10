@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "react-loader-spinner";
@@ -15,9 +15,19 @@ import { LoginPage, LoginForm } from "./style";
 import logo from "../../assets/logo.svg";
 
 export default function Login() {
-  const { setToken, setUserImage } = useContext(UserContext);
+  const { retrieveLogin, setLogin, persistLogin } = useContext(UserContext);
 
   const navigate = useNavigate();
+
+  // If a user is already logged in, go to '/hoje'
+  useEffect(() => {
+    const retrievedLogin = retrieveLogin();
+    if (retrievedLogin) {
+      setLogin(retrievedLogin);
+
+      navigate("/hoje");
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -41,8 +51,13 @@ export default function Login() {
         formData
       )
       .then((response) => {
-        setUserImage(response.data.image);
-        setToken(response.data.token);
+        const login = {
+          token: response.data.token,
+          userImage: response.data.image,
+        };
+        setLogin(login);
+        persistLogin(login);
+
         navigate("/hoje");
       })
       .catch((error) => {

@@ -16,14 +16,28 @@ export default function App() {
   const [token, setToken] = useState("");
   const [todayProgress, setTodayProgress] = useState(0.0);
 
+  function retrieveLogin() {
+    return JSON.parse(localStorage.getItem("login"));
+  }
+
+  function setLogin(login) {
+    setToken(login.token);
+    setUserImage(login.userImage);
+  }
+
+  function persistLogin(login) {
+    localStorage.setItem("login", JSON.stringify(login));
+  }
+
   return (
     <BrowserRouter>
       <UserContext.Provider
         value={{
+          retrieveLogin,
+          setLogin,
+          persistLogin,
           token,
-          setToken,
           userImage,
-          setUserImage,
           todayProgress,
           setTodayProgress,
         }}
