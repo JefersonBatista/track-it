@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+import UserContext from "../../contexts/UserContext";
 
 import { Button } from "../../styles/Button";
 import { Entry } from "../../styles/Entry";
@@ -12,7 +14,9 @@ import { LoginPage, LoginForm } from "./style";
 
 import logo from "../../assets/logo.svg";
 
-export default function Login({ setImage, setToken }) {
+export default function Login() {
+  const { setToken, setUserImage } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -37,7 +41,7 @@ export default function Login({ setImage, setToken }) {
         formData
       )
       .then((response) => {
-        setImage(response.data.image);
+        setUserImage(response.data.image);
         setToken(response.data.token);
         navigate("/hoje");
       })
@@ -85,7 +89,9 @@ export default function Login({ setImage, setToken }) {
         </Button>
       </LoginForm>
 
-      <PageLink to="/cadastro">Não tem uma conta? Cadastre-se!</PageLink>
+      <PageLink to="/cadastro" disabled={loading}>
+        Não tem uma conta? Cadastre-se!
+      </PageLink>
     </LoginPage>
   );
 }

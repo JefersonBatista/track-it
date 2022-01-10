@@ -95,7 +95,9 @@ export default function SignUp() {
         </Button>
       </SignUpForm>
 
-      <PageLink to="/">Já tem uma conta? Faça login!</PageLink>
+      <PageLink to="/" disabled={loading}>
+        Já tem uma conta? Faça login!
+      </PageLink>
     </SignUpPage>
   );
 }

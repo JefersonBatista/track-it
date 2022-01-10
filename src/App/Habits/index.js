@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -7,6 +7,7 @@ import { AddSharp } from "react-ionicons";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
+import UserContext from "../../contexts/UserContext";
 
 import { Entry } from "../../styles/Entry";
 import { Button } from "../../styles/Button";
@@ -22,7 +23,9 @@ import {
   Habit,
 } from "./style.js";
 
-export default function Habits({ userImage, token, todayProgress }) {
+export default function Habits() {
+  const { token, userImage, todayProgress } = useContext(UserContext);
+
   const [habits, setHabits] = useState(null);
   const [habitCreation, setHabitCreation] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");

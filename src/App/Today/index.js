@@ -1,22 +1,21 @@
 import dayjs from "dayjs";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
+import UserContext from "../../contexts/UserContext";
 
 import { TodayPage, TodayTop, Habits, Habit, HabitCheck } from "./style.js";
 
 import check from "../../assets/check.svg";
 
-export default function Today({
-  userImage,
-  token,
-  todayProgress,
-  setTodayProgress,
-}) {
+export default function Today() {
+  const { token, userImage, todayProgress, setTodayProgress } =
+    useContext(UserContext);
+
   const today = dayjs();
 
   function twoDigitsFormat(number) {
@@ -62,11 +61,12 @@ export default function Today({
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((response) => {
-        setHabits(response.data);
+        const doneHabits = response.data.filter((habit) => habit.done).length;
+        const todayHabits = response.data.length;
         const percentage =
-          (response.data.filter((habit) => habit.done).length /
-            response.data.length) *
-          100;
+          doneHabits === 0 ? 0.0 : (doneHabits / todayHabits) * 100;
+
+        setHabits(response.data);
         setTodayProgress(percentage);
       })
       .catch((error) => {
