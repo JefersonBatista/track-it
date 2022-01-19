@@ -13,7 +13,8 @@ import { Button } from "../../styles/Button";
 import { HabitsPage, HabitsTop, NoHabitsMessage } from "./style.js";
 
 export default function Habits() {
-  const { token, userImage, todayProgress } = useContext(UserContext);
+  const { token, userImage, todayProgress, setTodayProgress } =
+    useContext(UserContext);
 
   const [habits, setHabits] = useState(null);
   const [habitCreation, setHabitCreation] = useState(false);
@@ -33,6 +34,23 @@ export default function Habits() {
   };
 
   function getHabits() {
+    axios
+      .get(
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then((response) => {
+        const doneHabits = response.data.filter((habit) => habit.done).length;
+        const todayHabits = response.data.length;
+        const percentage =
+          doneHabits === 0 ? 0.0 : (doneHabits / todayHabits) * 100;
+
+        setTodayProgress(percentage);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
     axios
       .get(
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
