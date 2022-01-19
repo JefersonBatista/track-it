@@ -1,17 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { TrashOutline } from "react-ionicons";
 import { AddSharp } from "react-ionicons";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
-import { Weekdays, Weekday } from "../../styles/Weekdays";
 import UserContext from "../../contexts/UserContext";
 import HabitCreation from "./HabitCreation";
+import Habit from "./Habit";
 
 import { Button } from "../../styles/Button";
 
-import { HabitsPage, HabitsTop, NoHabitsMessage, Habit } from "./style.js";
+import { HabitsPage, HabitsTop, NoHabitsMessage } from "./style.js";
 
 export default function Habits() {
   const { token, userImage, todayProgress } = useContext(UserContext);
@@ -33,8 +32,6 @@ export default function Habits() {
     setHabitCreationLoading,
   };
 
-  const weekdays = ["D", "S", "T", "Q", "Q", "S", "S"];
-
   function getHabits() {
     axios
       .get(
@@ -47,20 +44,6 @@ export default function Habits() {
       .catch((error) => {
         console.log(error.response);
       });
-  }
-
-  function handleDelete(habitId, habitName) {
-    if (window.confirm(`Deseja mesmo deleter o hábito '${habitName}'?`)) {
-      axios
-        .delete(
-          `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
-        .then(getHabits)
-        .catch((error) => {
-          console.log(error.response);
-        });
-    }
   }
 
   useEffect(getHabits, [token]);
@@ -109,28 +92,7 @@ export default function Habits() {
         </NoHabitsMessage>
       ) : (
         habits.map((habit) => (
-          <Habit key={habit.id}>
-            <h2>{habit.name}</h2>
-            <Weekdays>
-              {weekdays.map((weekday, index) => (
-                <Weekday
-                  key={index}
-                  disabled
-                  selected={habit.days.includes(index)}
-                >
-                  {weekday}
-                </Weekday>
-              ))}
-            </Weekdays>
-            <TrashOutline
-              className="delete"
-              title="Deletar hábito"
-              width="20px"
-              height="20px"
-              color="#666666"
-              onClick={() => handleDelete(habit.id, habit.name)}
-            ></TrashOutline>
-          </Habit>
+          <Habit key={habit.id} habit={habit} getHabits={getHabits} />
         ))
       )}
 

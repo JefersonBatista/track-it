@@ -1,16 +1,13 @@
 import dayjs from "dayjs";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import Loader from "react-loader-spinner";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
 import UserContext from "../../contexts/UserContext";
+import Habit from "./Habit";
 
-import { TodayPage, TodayTop, Habits, Habit, HabitCheck } from "./style.js";
-
-import check from "../../assets/check.svg";
+import { TodayPage, TodayTop, Habits } from "./style.js";
 
 export default function Today() {
   const { token, userImage, todayProgress, setTodayProgress } =
@@ -52,7 +49,6 @@ export default function Today() {
   }
 
   const [habits, setHabits] = useState(null);
-  const [checkLoading, setCheckLoading] = useState(false);
 
   function getHabits() {
     axios
@@ -71,28 +67,6 @@ export default function Today() {
       })
       .catch((error) => {
         console.log(error.response);
-      });
-  }
-
-  function handleCheck(habitId, done) {
-    const BASE_URL =
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/";
-
-    setCheckLoading(habitId);
-
-    axios
-      .post(
-        `${BASE_URL}/${habitId}/${done ? "uncheck" : "check"}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then(() => {
-        setCheckLoading(false);
-        getHabits();
-      })
-      .catch((error) => {
-        console.log(error.response);
-        setCheckLoading(false);
       });
   }
 
@@ -124,44 +98,7 @@ export default function Today() {
 
       <Habits>
         {habits.map((habit) => (
-          <Habit key={habit.id}>
-            <div>
-              <h2>{habit.name}</h2>
-              <p>
-                Sequência atual:{" "}
-                <span className={habit.done ? "done" : ""}>
-                  {habit.currentSequence} dia
-                  {habit.currentSequence === 1 ? "" : "s"}
-                </span>
-              </p>
-              <p>
-                Seu recorde:{" "}
-                <span
-                  className={
-                    habit.done &&
-                    habit.currentSequence === habit.highestSequence
-                      ? "done"
-                      : ""
-                  }
-                >
-                  {habit.highestSequence} dia
-                  {habit.highestSequence === 1 ? "" : "s"}
-                </span>
-              </p>
-            </div>
-
-            <HabitCheck
-              done={habit.done}
-              disable={checkLoading}
-              onClick={() => handleCheck(habit.id, habit.done)}
-            >
-              {checkLoading === habit.id ? (
-                <Loader type="ThreeDots" color="white" height={69} width={69} />
-              ) : (
-                <img src={check} alt="Check" />
-              )}
-            </HabitCheck>
-          </Habit>
+          <Habit key={habit.id} habit={habit} getHabits={getHabits} />
         ))}
       </Habits>
       <Menu todayProgress={todayProgress} />
