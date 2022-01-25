@@ -19,6 +19,11 @@ const Header = styled.header`
   font-family: "Playball", cursive;
   font-size: 39px;
   color: white;
+
+  .logout {
+    position: absolute;
+    right: 75px;
+  }
 `;
 
 const UserImage = styled.img`

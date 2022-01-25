@@ -25,6 +25,15 @@ export default function App() {
     setUserImage(login.userImage);
   }
 
+  function retrieveAndSetLogin() {
+    const retrievedLogin = retrieveLogin();
+
+    if (retrievedLogin) {
+      setLogin(retrievedLogin);
+    }
+    return Boolean(retrievedLogin);
+  }
+
   function persistLogin(login) {
     localStorage.setItem("login", JSON.stringify(login));
   }
@@ -35,6 +44,7 @@ export default function App() {
         value={{
           retrieveLogin,
           setLogin,
+          retrieveAndSetLogin,
           persistLogin,
           token,
           userImage,

@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AddSharp } from "react-ionicons";
+import { useNavigate } from "react-router-dom";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
@@ -13,8 +14,15 @@ import { Button } from "../../styles/Button";
 import { HabitsPage, HabitsTop, NoHabitsMessage } from "./style.js";
 
 export default function Habits() {
-  const { token, userImage, todayProgress, setTodayProgress } =
-    useContext(UserContext);
+  const {
+    retrieveAndSetLogin,
+    token,
+    userImage,
+    todayProgress,
+    setTodayProgress,
+  } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   const [habits, setHabits] = useState(null);
   const [habitCreation, setHabitCreation] = useState(false);
@@ -64,7 +72,15 @@ export default function Habits() {
       });
   }
 
-  useEffect(getHabits, [token]);
+  useEffect(() => {
+    // If user is not logged in, go to login page
+
+    if (retrieveAndSetLogin()) {
+      getHabits();
+    } else {
+      navigate("/");
+    }
+  }, [token]);
 
   if (habits === null) {
     return (

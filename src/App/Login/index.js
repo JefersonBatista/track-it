@@ -15,16 +15,14 @@ import { LoginPage, LoginForm } from "./style";
 import logo from "../../assets/logo.svg";
 
 export default function Login() {
-  const { retrieveLogin, setLogin, persistLogin } = useContext(UserContext);
+  const { retrieveAndSetLogin, setLogin, persistLogin } =
+    useContext(UserContext);
 
   const navigate = useNavigate();
 
   // If a user is already logged in, go to '/hoje'
   useEffect(() => {
-    const retrievedLogin = retrieveLogin();
-    if (retrievedLogin) {
-      setLogin(retrievedLogin);
-
+    if (retrieveAndSetLogin()) {
       navigate("/hoje");
     }
   }, []);

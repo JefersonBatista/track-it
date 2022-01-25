@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import TopBar from "../../components/TopBar";
 import Menu from "../../components/Menu";
@@ -10,8 +11,15 @@ import Habit from "./Habit";
 import { TodayPage, TodayTop, Habits } from "./style.js";
 
 export default function Today() {
-  const { token, userImage, todayProgress, setTodayProgress } =
-    useContext(UserContext);
+  const {
+    retrieveAndSetLogin,
+    token,
+    userImage,
+    todayProgress,
+    setTodayProgress,
+  } = useContext(UserContext);
+
+  const navigate = useNavigate();
 
   const today = dayjs();
 
@@ -70,7 +78,15 @@ export default function Today() {
       });
   }
 
-  useEffect(getHabits, [token]);
+  useEffect(() => {
+    // If user is not logged in, go to login page
+
+    if (retrieveAndSetLogin()) {
+      getHabits();
+    } else {
+      navigate("/");
+    }
+  }, [token]);
 
   if (habits === null) {
     return (
