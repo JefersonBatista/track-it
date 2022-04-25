@@ -16,7 +16,7 @@ This app aids anyone to organize habits weekly and to improve the discipline in 
 
 ## Next Steps
 
-- A calendar with a historic of accomplishment of habits
+- Not soon, a calendar with a history of accomplishment of habits
 
 # Technologies
 
